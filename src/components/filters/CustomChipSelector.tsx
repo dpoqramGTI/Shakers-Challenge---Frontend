@@ -1,22 +1,43 @@
+// components/filter/CustomChipSelector.tsx
 import React from "react";
 import { Autocomplete, TextField, Box, Chip } from "@mui/material";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMoreSharp";
 
+type OptionItem = {
+  id: number;
+  name: string;
+};
+
 interface FilterFieldProps {
   label: string;
-  options: string[];
-  selected: string[];
-  onChange: (values: string[]) => void;
+  options: OptionItem[];    // Lista de opciones disponibles
+  selected: number[];       // IDs seleccionados
+  onChange: (values: number[]) => void;  // Callback al cambiar selección
 }
 
-export function FilterField({ label, options, selected, onChange }: FilterFieldProps) {
+/**
+ * CustomChipSelector
+ * 
+ * Selector múltiple que muestra chips personalizados para las opciones seleccionadas.
+ * Usa Autocomplete de MUI con renderizado custom de chips que tienen un botón de borrado estilizado.
+ * 
+ * Props:
+ * - label: texto para placeholder y etiquetas
+ * - options: lista completa de opciones posibles
+ * - selected: array con IDs seleccionados
+ * - onChange: callback con el nuevo array de IDs cuando cambian las selecciones
+ */
+export function CustomChipSelector({ label, options, selected, onChange }: FilterFieldProps) {
+  // Filtra las opciones seleccionadas para mostrarlas como chips
+  const selectedOptions = options.filter((opt) => selected.includes(opt.id));
 
-  const renderCustomChips = (selected: string[], onDelete: (value: string) => void) => (
+  // Renderiza los chips personalizados con botón de borrado estilizado
+  const renderCustomChips = (items: OptionItem[], onDelete: (id: number) => void) => (
     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-      {selected.map((value) => (
+      {items.map((item) => (
         <Chip
-          key={value}
-          label={value}
+          key={item.id}
+          label={item.name}
           size="medium"
           deleteIcon={
             <Box
@@ -43,7 +64,7 @@ export function FilterField({ label, options, selected, onChange }: FilterFieldP
               X
             </Box>
           }
-          onDelete={() => onDelete(value)}
+          onDelete={() => onDelete(item.id)}
           sx={{
             backgroundColor: "#edf7f6",
             color: "#033028",
@@ -59,10 +80,14 @@ export function FilterField({ label, options, selected, onChange }: FilterFieldP
       <Autocomplete
         multiple
         options={options}
-        value={selected}
-        size="small"
-        onChange={(_, newValue: string[]) => onChange(newValue)}
+        getOptionLabel={(opt) => opt.name}
+        value={selectedOptions}
+        onChange={(_, newValue: OptionItem[]) => {
+          const ids = newValue.map((opt) => opt.id);
+          onChange(ids);
+        }}
         popupIcon={<UnfoldMoreIcon fontSize="small" />}
+        size="small"
         sx={{ flex: 1 }}
         renderInput={(params) => (
           <TextField
@@ -71,10 +96,10 @@ export function FilterField({ label, options, selected, onChange }: FilterFieldP
             size="small"
           />
         )}
-        renderTags={(selected) =>
-          renderCustomChips(selected, (val) =>
-            onChange(selected.filter((i) => i !== val)),
-          )
+        renderTags={(tagValue) =>
+          renderCustomChips(tagValue, (id) => {
+            onChange(selected.filter((i) => i !== id));
+          })
         }
       />
     </Box>

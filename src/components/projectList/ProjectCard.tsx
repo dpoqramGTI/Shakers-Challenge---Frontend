@@ -1,7 +1,4 @@
-/*
-File: components/ProjectCard.tsx
-Descripción: Encapsula la tarjeta de proyecto
-*/
+// components/projectList/ProjectCard.tsx
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -14,11 +11,22 @@ import { formatThousands } from "@/utils/misc";
 
 interface ProjectCardProps {
   proj: Project;
-  index: number;
+  index: number; // Índice para animaciones escalonadas
 }
 
-export function ProjectCard({ proj, index }: ProjectCardProps) {
+/**
+ * ProjectCard
+ * 
+ * Props:
+ * - proj: proyecto a mostrar
+ * - index: índice para animación escalonada
+ * 
+ * Muestra tarjeta del proyecto con logo, título, categoría,
+ * presupuesto y habilidades.
+ */
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proj, index }) => {
   const router = useRouter();
+
   return (
     <Box key={proj.id} sx={{ width: "100%" }}>
       <motion.div
@@ -46,9 +54,16 @@ export function ProjectCard({ proj, index }: ProjectCardProps) {
                 <Typography
                   variant="body2"
                   color="#0b5a4c"
-                  sx={{ mb: 1, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}
+                  sx={{
+                    mb: 1,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                 >
-                  {proj.category} | {proj.subcategory} |{" "}
+                  {proj.category} | {proj.organization.industry} |{" "}
                   <span style={{ color: "#1eb59a96" }}>€</span>{" "}
                   {proj.budget.total != null
                     ? `${formatThousands(proj.budget.total)} €`
@@ -57,19 +72,40 @@ export function ProjectCard({ proj, index }: ProjectCardProps) {
               </CardContent>
               <SkillChips positions={proj.positions.map((p) => ({ skillIds: p.skillIds, skills: p.skills }))} />
             </Box>
-            <Box sx={{ display: { xs: "none", sm: "flex" }, alignSelf: "stretch", alignItems: "center", justifyContent: "center", p: 1, borderLeft: { sm: "1px solid #e0e0e0" } }}>
+            <Box
+              sx={{
+                display: { xs: "none", sm: "flex" },
+                alignSelf: "stretch",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 1,
+                borderLeft: { sm: "1px solid #e0e0e0" },
+              }}
+            >
+              {/* Ícono de flecha derecha */}
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 512">
-                <path fill="currentColor" d="m224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4l-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z" />
+                <path
+                  fill="currentColor"
+                  d="m224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4l-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                />
               </svg>
             </Box>
           </CardActionArea>
-          <CardActionArea onClick={() => router.push(`/projects/${proj.id}`)} sx={{ display: { xs: "block", sm: "none" }, px: 1.5, pb: 1 }}>
+
+          {/* Versión móvil del SkillChips */}
+          <CardActionArea
+            onClick={() => router.push(`/projects/${proj.id}`)}
+            sx={{ display: { xs: "block", sm: "none" }, px: 1.5, pb: 1 }}
+          >
             <Box sx={{ width: "100%" }}>
-              <SkillChips positions={proj.positions.map((p) => ({ skillIds: p.skillIds, skills: p.skills }))} visibleOnMobile />
+              <SkillChips
+                positions={proj.positions.map((p) => ({ skillIds: p.skillIds, skills: p.skills }))}
+                visibleOnMobile
+              />
             </Box>
           </CardActionArea>
         </Card>
       </motion.div>
     </Box>
   );
-}
+};

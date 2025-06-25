@@ -1,8 +1,4 @@
-/*
-File: components/OrgAvatar.tsx
-Descripción: Encapsula la lógica de mostrar avatar de la organización
-*/
-
+// components/projectList/OrgAvatar.tsx
 import React from "react";
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
@@ -10,10 +6,20 @@ import { Box, Typography } from "@mui/material";
 interface OrgAvatarProps {
   logo?: string;
   name: string;
-  size?: number;
+  size?: number; // Tamaño en píxeles (ancho y alto)
 }
 
-export function OrgAvatar({ logo, name, size = 150 }: OrgAvatarProps) {
+/**
+ * OrgAvatar
+ *
+ * Props:
+ * - logo: URL del logo de la organización (opcional)
+ * - name: nombre de la organización
+ * - size: tamaño del avatar en píxeles (ancho y alto)
+ *
+ * Muestra el logo o la inicial de la organización con su nombre.
+ */
+export const OrgAvatar: React.FC<OrgAvatarProps> = ({ logo, name, size = 150 }) => {
   return (
     <Box
       sx={{
@@ -78,4 +84,4 @@ export function OrgAvatar({ logo, name, size = 150 }: OrgAvatarProps) {
       </Typography>
     </Box>
   );
-}
+};

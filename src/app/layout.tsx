@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import { ReactNode } from "react";
-import AppThemeProvider from "@/components/AppThemeProvider";
+import AppThemeProvider from "@/components/toast/AppThemeProvider";
 
 export const metadata = {
   title: "Shakers Projects",
@@ -13,7 +13,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="es">
       <head />
       <body>
-        {/* AppThemeProvider es Client Component */}
         <AppThemeProvider>
           {children}
         </AppThemeProvider>

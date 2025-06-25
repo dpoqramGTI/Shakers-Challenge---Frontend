@@ -3,24 +3,74 @@ import React from "react";
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import Image from "next/image";
 import type { Organization, Person } from "@/types";
-import imagenNav from "@/images/imagenNav.webp";
+import imagenNav from "@/images/businessMan.jpg";
 
 interface ResponsibleCardProps {
   organization: Organization;
   leader: Person;
 }
-export const ResponsibleCard: React.FC<ResponsibleCardProps> = ({ organization, leader }) => (
-  <Paper sx={{ p: 3, flex: 1, border: "1px solid #e6e6e6", boxShadow: "none", borderRadius: 3, position: "inherit" }}>
+
+/**
+ * ResponsibleCard
+ * 
+ * Props:
+ * - organization: datos de la organización responsable
+ * - leader: datos de la persona líder del proyecto
+ * 
+ * Muestra logo y nombre de la organización, imagen y nombre del líder con su rol.
+ */
+export const ResponsibleCard: React.FC<ResponsibleCardProps> = ({
+  organization,
+  leader,
+}) => (
+  <Paper
+    sx={{
+      p: 3,
+      flex: 1,
+      border: "1px solid #e6e6e6",
+      boxShadow: "none",
+      borderRadius: 3,
+      position: "inherit",
+    }}
+  >
     <Stack direction="column" spacing={2} alignItems="center">
-      <Box sx={{ width: "100%", gap: 1.5, display: "flex", alignItems: "center" }}>
-        <Image src={organization.logo} alt={organization.name} width={25} height={25} style={{ borderRadius: "0.25rem" }} />
+      <Box
+        sx={{
+          width: "100%",
+          gap: 1.5,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          src={organization.logo}
+          alt={organization.name}
+          width={25}
+          height={25}
+          style={{ borderRadius: "0.25rem" }}
+        />
         <Typography variant="subtitle2">{organization.name}</Typography>
       </Box>
-      <Box sx={{ width: "100%", position: "relative", paddingTop: "100%", borderRadius: "0.25rem", overflow: "hidden" }}>
-        <Image src={imagenNav} alt={`${leader.name} ${leader.lastName}`} fill style={{ objectFit: "contain" }} />
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          paddingTop: "100%",
+          borderRadius: "0.25rem",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src={imagenNav}
+          alt={`${leader.name} ${leader.lastName}`}
+          fill
+          style={{ objectFit: "contain", objectPosition: "center top" }}
+        />
       </Box>
       <Box sx={{ width: "100%" }}>
-        <Typography variant="body2" fontWeight="bold">{leader.name} {leader.lastName}</Typography>
+        <Typography variant="body2" fontWeight="bold">
+          {leader.name} {leader.lastName}
+        </Typography>
         <Typography variant="caption">Project Owner</Typography>
       </Box>
     </Stack>

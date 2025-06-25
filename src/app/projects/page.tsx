@@ -1,8 +1,5 @@
 // app/projects/page.tsx
-import ProjectsPageClient from "@/components/ProjectsPageClient";
-import rawMock from "@/mocks/companyMock.json";
-import type { RawProject } from "@/types";
-import { transformRawProject } from "@/utils/transform";
+import { ListWrapper } from "@/components/projectList/ListWrapper";
 
 export const metadata = {
   title: "Shakers - Reinventing Work",
@@ -10,7 +7,5 @@ export const metadata = {
 };
 
 export default function ProjectsPage() {
-  const rawProjects = rawMock as RawProject[];
-  const projects = rawProjects.map(transformRawProject);
-  return <ProjectsPageClient initialProjects={projects} />;
+  return <ListWrapper />;
 }

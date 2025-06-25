@@ -1,11 +1,17 @@
-// hooks/useAppliedPositions.ts
+// components/hooks/useAppliedPositions.ts
 import { useEffect, useState } from "react";
 
+/**
+ * useAppliedPositions
+ * 
+ * Hook para gestionar posiciones aplicadas guardadas en localStorage.
+ * Devuelve el set de posiciones aplicadas y funciones para añadir,
+ * eliminar y verificar.
+ */
 export function useAppliedPositions() {
   const [appliedPositions, setAppliedPositions] = useState<Set<number>>(new Set());
 
   useEffect(() => {
-    // Aquí es seguro acceder a localStorage
     const saved = localStorage.getItem("appliedPositions");
     if (saved) {
       setAppliedPositions(new Set(JSON.parse(saved)));

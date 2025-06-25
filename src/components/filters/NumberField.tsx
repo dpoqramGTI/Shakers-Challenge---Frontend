@@ -1,5 +1,4 @@
-
-// components/NumberField.tsx
+// components/filter/NumberField.tsx
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMoreSharp";
@@ -8,6 +7,17 @@ interface NumberFieldProps {
   value?: number;
   onClick?: () => void;
 }
+
+/**
+ * NumberField
+ * 
+ * Componente visual que muestra un número dentro de un cuadro con borde,
+ * acompañado de un icono para indicar capacidad desplegable o interactiva.
+ * Usado aquí para mostrar la cantidad de filtros seleccionados.
+ * 
+ * Props:
+ * - value: número a mostrar (por defecto 0)
+ */
 export function NumberField({ value }: NumberFieldProps) {
   return (
     <Box

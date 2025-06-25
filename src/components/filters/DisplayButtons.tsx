@@ -1,5 +1,4 @@
-
-// components/FilterDisplayOnList.tsx
+// components/filter/DisplayButtons.tsx
 import React from "react";
 import { Box, Button } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -12,10 +11,17 @@ interface FilterBarProps {
   onToggleSort: () => void;
 }
 
-export const FilterDisplayOnList: React.FC<FilterBarProps> = ({ onOpenFilter, sortOrder, onToggleSort }) => (
+/**
+ * DisplayButtons
+ * 
+ * Barra con botones para abrir el filtro y cambiar el orden de publicación.
+ * - Botón "Filtrar" dispara onOpenFilter.
+ * - Botón "Publicación" cambia orden asc/desc y muestra icono correspondiente.
+ */
+export const DisplayButtons: React.FC<FilterBarProps> = ({ onOpenFilter, sortOrder, onToggleSort }) => (
   <Box
     sx={{
-      p: 2,
+      px: 0,
       display: "flex",
       gap: 1,
       justifyContent: "flex-end",

@@ -1,7 +1,4 @@
-/*
-File: components/SkillChips.tsx
-Descripción: Renderiza lista de chips de skills o specialties
-*/
+// components/projectList/SkillChips.tsx
 import React from "react";
 import { Box, Chip } from "@mui/material";
 import { skillIcons } from "@/utils/skillIcons";
@@ -11,7 +8,16 @@ interface SkillChipsProps {
   visibleOnMobile?: boolean;
 }
 
-export function SkillChips({ positions, visibleOnMobile = false }: SkillChipsProps) {
+/**
+ * SkillChips
+ * 
+ * Props:
+ * - positions: array con skillIds y nombres de skills
+ * - visibleOnMobile: si mostrar en vista móvil
+ * 
+ * Muestra chips de habilidades únicas asociadas a las posiciones.
+ */
+export const SkillChips: React.FC<SkillChipsProps> = ({ positions, visibleOnMobile = false }) => {
   const uniqueIds = Array.from(new Set(positions.flatMap((p) => p.skillIds)));
   return (
     <Box
@@ -48,4 +54,4 @@ export function SkillChips({ positions, visibleOnMobile = false }: SkillChipsPro
       })}
     </Box>
   );
-}
+};

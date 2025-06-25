@@ -7,12 +7,16 @@ export interface IndustryItem { id: number; name: string; }
 export interface CategoryItem { id: number; name: string; }
 export interface SubcategoryItem { id: number; name: string; categoryId: number; }
 
-// Tipo para RawProject según la empresa:
+// Tipo para RawProject según la respuesta de la API:
 export interface RawOrganization {
   id: number;
   name: string;
   logo: string;
-  industry: number; // ID numérico
+  industry: {
+    id: number;
+    name: string;
+  };
+  industryId: number;
 }
 
 export interface RawProjectLeader {
@@ -21,19 +25,19 @@ export interface RawProjectLeader {
   lastName: string;
 }
 
-export interface RawBudget {
-  hourFrom: number | null;
-  hourTo: number | null;
-  total: number | null;
-}
-
 export interface RawPosition {
   id: number;
   title: string;
-  skillIds: number[];
-  skills: number[];
-  specialties: number[];
-  referralBonus: number;
+  projectId: number;
+  skills: {
+    id: number;
+    name: string;
+  }[];
+  specialties: {
+    id: number;
+    name: string;
+  }[];
+  referralBonus: number | null;
 }
 
 export interface RawFAQ {
@@ -44,27 +48,40 @@ export interface RawFAQ {
 export interface RawProject {
   id: number;
   title: string;
-  organization: RawOrganization;
-  projectLeader: RawProjectLeader;
-  category: number;
-  subcategory: number;
-  startDate: string;
-  budget: RawBudget;
-  totalHours: number;
   description: string;
+  organization: RawOrganization;
+  organizationId: number;
+  projectLeader: RawProjectLeader;
+  projectLeaderId: number;
+  category: {
+    id: number;
+    name: string;
+  };
+  categoryId: number;
+  subcategory: {
+    id: number;
+    name: string;
+  } | null;
+  subcategoryId: number | null;
+  totalHours: number;
+  budgetHourFrom: number | null;
+  budgetHourTo: number | null;
+  budgetTotal: number | null;
+  startDate: string;
+  creationDate: string;
+  publishedAt: string;
+  status: string;
   goals: string[];
   faqs: RawFAQ[];
-  status: string;
-  creationDate: string;
   positions: RawPosition[];
   totalApplicationsAmount: number;
-  publishedAt: string;
 }
 
 // Tipo enriquecido para frontend:
 export interface Project {
   id: number;
   title: string;
+  description: string;
   organization: {
     id: number;
     name: string;
@@ -79,17 +96,17 @@ export interface Project {
   category: string;
   subcategory: string;
   startDate: string;
+  creationDate: string;
+  publishedAt: string;
+  status: string;
+  totalHours: number;
   budget: {
+    total: number | null;
     hourFrom: number | null;
     hourTo: number | null;
-    total: number | null;
   };
-  totalHours: number;
-  description: string;
   goals: string[];
   faqs: { question: string; answer: string }[];
-  status: string;
-  creationDate: string;
   positions: {
     id: number;
     title: string;
@@ -99,7 +116,6 @@ export interface Project {
     referralBonus: number;
   }[];
   totalApplicationsAmount: number;
-  publishedAt: string;
 }
 
 export interface Position {
@@ -116,7 +132,7 @@ export interface FAQ {
 export interface Organization {
   name: string;
   industry: string;
-  logo: string; // URL o path al logo (por ejemplo, para el componente <Image />)
+  logo: string; // URL o path al logo
 }
 
 export interface Person {
@@ -125,13 +141,68 @@ export interface Person {
 }
 
 // Tipo para filtros
-export interface FilterValues {
-  specialties: string[];
-  skills: string[];
-  projectTypes: string[];
-  industries: string[];
+export type FilterValues = {
+  specialties: number[];
+  skills: number[];
+  categories: number[];
+  industries: number[];
   sortOrder: "newest" | "oldest";
+};
+
+export type { FilterValues as ProjectFilterValues };
+
+// ------------------------------------------------------
+// Tipos para paginación y consulta de proyectos
+// ------------------------------------------------------
+/**
+ * Parámetros de consulta (query params) para la lista de proyectos.
+ * Se envían como ?page=0&limit=20&category=...&skills=js&skills=react etc.
+ */
+export interface ProjectQueryParams {
+  page?: number;
+  limit?: number;
+  category?: string;
+  subcategory?: string;
+  industries?: number[];
+  minBudget?: number;
+  maxBudget?: number;
+  skills?: number[];
+  specialties?: number[];
+  categories?: number[];
+  sort?: string;
 }
 
-// Exportar para los componentes
-export type { FilterValues as ProjectFilterValues };
+/**
+ * Respuesta de la API para lista de proyectos paginada.
+ */
+export interface ProjectListResponse {
+  items: RawProject[]; // raw, luego transformar en frontend
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    lastPage: number;
+  };
+}
+
+/**
+ * Respuesta de la API para detalle de un proyecto.
+ */
+export type ProjectDetailResponse = RawProject;
+
+export type OptionItem = {
+  id: number;
+  name: string;
+};
+
+export interface FilterBarProps {
+  specialtiesOptions: OptionItem[];
+  skillsOptions: OptionItem[];
+  categoriesOptions: OptionItem[];
+  industryOptions: OptionItem[];
+  onApply: (filters: FilterValues) => void;
+  onClear?: () => void;
+  initialValues?: Partial<FilterValues>;
+  applyButtonText?: string;
+  clearButtonText?: string;
+}

@@ -6,6 +6,16 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 interface GoalsSectionProps {
   goals: string[];
 }
+
+/**
+ * GoalsSection
+ * 
+ * Props:
+ * - goals: array con objetivos o tareas del proyecto
+ * 
+ * Lista de objetivos y tareas del proyecto con iconos de check.
+ * Muestra mensaje alternativo si no hay objetivos definidos.
+ */
 export const GoalsSection: React.FC<GoalsSectionProps> = ({ goals }) => (
   <Box sx={{ my: 3 }}>
     <Typography variant="h6" sx={{ color: "#033028" }}>¿Cuáles son los objetivos y tareas a realizar?</Typography>

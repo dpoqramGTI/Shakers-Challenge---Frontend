@@ -1,132 +1,66 @@
-// hooks/useProjectFilters.ts
-import { useState, useMemo, useCallback } from "react";
-import type { Project, FilterValues } from "@/types";
+// components/hooks/useProjectFilters.ts
+"use client";
+import { useState, useMemo } from "react";
+import type { ProjectFilterValues } from "@/types";
 
-export function useProjectFilters(initialProjects: Project[]) {
-  const [filters, setFilters] = useState<FilterValues>({
+/**
+ * useProjectFilters
+ * 
+ * Hook para gestionar el estado local de filtros de proyectos.
+ * El filtrado real se hace en backend; aquí solo se mantiene estado y handlers.
+ */
+export function useProjectFilters() {
+  const [filters, setFilters] = useState<ProjectFilterValues>({
     specialties: [],
     skills: [],
-    projectTypes: [],
+    categories: [],
     industries: [],
     sortOrder: "newest",
   });
 
-  const specialtiesOptions = useMemo(() => {
-    const setOps = new Set<string>();
-    initialProjects.forEach((proj) =>
-      proj.positions.forEach((pos) =>
-        pos.specialties.forEach((s) => setOps.add(s)),
-      ),
-    );
-    return Array.from(setOps);
-  }, [initialProjects]);
-
-  const skillsOptions = useMemo(() => {
-    const setOps = new Set<string>();
-    initialProjects.forEach((proj) =>
-      proj.positions.forEach((pos) =>
-        pos.skills.forEach((s) => setOps.add(s)),
-      ),
-    );
-    return Array.from(setOps);
-  }, [initialProjects]);
-
-  const projectTypesOptions = useMemo(() => {
-    const setOps = new Set<string>();
-    initialProjects.forEach((proj) =>
-      setOps.add(`${proj.category} > ${proj.subcategory}`),
-    );
-    return Array.from(setOps);
-  }, [initialProjects]);
-
-  const industryOptions = useMemo(() => {
-    const setOps = new Set<string>();
-    initialProjects.forEach((proj) => setOps.add(proj.organization.industry));
-    return Array.from(setOps);
-  }, [initialProjects]);
-
-  const filteredProjects = useMemo(() => {
-    return initialProjects
-      .filter((proj) => {
-        if (
-          filters.specialties.length > 0 &&
-          !proj.positions.some((pos) =>
-            pos.specialties.some((s) => filters.specialties.includes(s)),
-          )
-        )
-          return false;
-        if (
-          filters.skills.length > 0 &&
-          !proj.positions.some((pos) =>
-            pos.skills.some((s) => filters.skills.includes(s)),
-          )
-        )
-          return false;
-        if (
-          filters.projectTypes.length > 0 &&
-          !filters.projectTypes.includes(
-            `${proj.category} > ${proj.subcategory}`,
-          )
-        )
-          return false;
-        if (
-          filters.industries.length > 0 &&
-          !filters.industries.includes(proj.organization.industry)
-        )
-          return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const da = new Date(a.publishedAt).getTime();
-        const db = new Date(b.publishedAt).getTime();
-        return filters.sortOrder === "newest" ? db - da : da - db;
-      });
-  }, [initialProjects, filters]);
-
-  const hasAnyFilter = useMemo(
-    () =>
+  // Si hay algún filtro aplicado (excepto sortOrder)
+  const hasAnyFilter = useMemo(() => {
+    return (
       filters.specialties.length > 0 ||
       filters.skills.length > 0 ||
-      filters.projectTypes.length > 0 ||
-      filters.industries.length > 0,
-    [filters],
-  );
+      filters.categories.length > 0 ||
+      filters.industries.length > 0
+    );
+  }, [filters]);
 
-  const handleApply = useCallback((newFilters: FilterValues) => {
+  const handleApply = (newFilters: ProjectFilterValues) => {
     setFilters(newFilters);
-  }, []);
+  };
 
-  const handleClear = useCallback(() => {
+  const handleClear = () => {
     setFilters({
       specialties: [],
       skills: [],
-      projectTypes: [],
+      categories: [],
       industries: [],
       sortOrder: "newest",
     });
-  }, []);
+  };
 
-  const toggleSortOrder = useCallback(() => {
+  const toggleSortOrder = () => {
     setFilters((prev) => ({
       ...prev,
       sortOrder: prev.sortOrder === "newest" ? "oldest" : "newest",
     }));
-  }, []);
+  };
 
-  const removeFilterValue = useCallback((category: keyof Omit<FilterValues, "sortOrder">, value: string) => {
+  const removeFilterValue = (
+    category: keyof Omit<ProjectFilterValues, "sortOrder">,
+    value: number,
+  ) => {
     setFilters((prev) => ({
       ...prev,
-      [category]: prev[category].filter((i) => i !== value),
+      [category]: prev[category].filter((v) => v !== value),
     }));
-  }, []);
+  };
 
   return {
     filters,
-    specialtiesOptions,
-    skillsOptions,
-    projectTypesOptions,
-    industryOptions,
-    filteredProjects,
     hasAnyFilter,
     handleApply,
     handleClear,
