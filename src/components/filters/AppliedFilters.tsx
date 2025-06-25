@@ -66,7 +66,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
-        <Typography variant="subtitle1" fontStyle={"italic"}>
+        <Typography variant="subtitle1" fontStyle={"italic"} sx={{ fontWeight: 600, opacity: 0.95, fontSize: "0.95rem" }}>
           Filtros aplicados
         </Typography>
         <IconButton size="small" onClick={handleToggle} aria-label={expanded ? "Replegar filtros" : "Ver filtros aplicados"}>

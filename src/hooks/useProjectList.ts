@@ -38,7 +38,6 @@ export function useProjectList(
 
       const base = process.env.NEXT_PUBLIC_API_URL || "";
       const url = `${base}/projects?${query.toString()}`;
-      console.log("Fetching projects from:", url);
 
       const res = await fetch(url);
       const contentType = res.headers.get("content-type") || "";
@@ -54,7 +53,6 @@ export function useProjectList(
         throw new Error("Unexpected response format, se esperaba JSON");
       }
       const json = await res.json();
-      console.log("Fetched projects:", json);
       setData(json as ProjectListResponse);
     } catch (err) {
       console.error("useProjectList error:", err);

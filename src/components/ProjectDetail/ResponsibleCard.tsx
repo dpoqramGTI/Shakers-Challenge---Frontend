@@ -64,7 +64,7 @@ export const ResponsibleCard: React.FC<ResponsibleCardProps> = ({
           src={imagenNav}
           alt={`${leader.name} ${leader.lastName}`}
           fill
-          style={{ objectFit: "contain", objectPosition: "center top" }}
+          style={{ objectFit: "cover", objectPosition: "center top" }}
         />
       </Box>
       <Box sx={{ width: "100%" }}>

@@ -33,7 +33,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proj, index }) => {
         initial={{ opacity: 0, x: -150 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: index * 0.05, type: "spring", stiffness: 50, damping: 6 }}
+        transition={{ delay: index * 0.05, type: "spring", stiffness: 40, damping: 6 }}
       >
         <Card variant="outlined" sx={{ display: "flex", flexDirection: "column", p: { xs: 1, sm: 0 } }}>
           <CardActionArea

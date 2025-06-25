@@ -1,4 +1,4 @@
-// app/projects/page.tsx
+import React, { Suspense } from "react";
 import { ListWrapper } from "@/components/projectList/ListWrapper";
 
 export const metadata = {
@@ -7,5 +7,9 @@ export const metadata = {
 };
 
 export default function ProjectsPage() {
-  return <ListWrapper />;
+  return (
+    <Suspense fallback={<div>Cargando proyectos...</div>}>
+      <ListWrapper />
+    </Suspense>
+  );
 }
